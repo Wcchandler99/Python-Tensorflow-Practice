@@ -1,8 +1,8 @@
-import matplotlib.pyplot as plt
-from wordcloud import WordCloud
+# import matplotlib.pyplot as plt
+# from wordcloud import WordCloud
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pandas as pd
-import numpy as np
+# import numpy as np
 
 text_file = open('D:/Working_Directory/1-8_WOT.txt', 'rb')
 text_initial = text_file.read().decode(encoding='utf-8')
@@ -13,9 +13,10 @@ for x in text_initial:
              "t", "u", "v", "w", "x", "y", "z"):
         text += x
 
+
 corpus = text.split("the wheel of time\n\n")
 # print(corpus[0])
-vectorizer = TfidfVectorizer(stop_words='english', ngram_range=(1, 1), max_df=.6, min_df=.01)
+vectorizer = TfidfVectorizer(stop_words='english', ngram_range=(1, 1), max_df=1, min_df=.001)
 
 X = vectorizer.fit_transform(corpus)
 feature_names = vectorizer.get_feature_names_out()
@@ -30,18 +31,20 @@ for x in range(8):
     column_name = "Book" + str(x + 1)
     column_names.append(column_name)
 data.columns = column_names
-# Find the top 30 words said by each President
-# top_dict = {}
-# for c in range(4):
-#    top = data.iloc[:, c].sort_values(ascending=False).head(30)
-#    top_dict[data.columns[c]] = list(zip(top.index, top.values))
-# Print the top 15 words said by each President
-# for chapter, top_words in top_dict.items():
-#    print(chapter)
-#    print(', '.join([word for word, count in top_words[0:14]]))
-#    print('---')
+
+# Find the top 30 words said in each book
+top_dict = {}
+for c in range(8):
+    top = data.iloc[:, c].sort_values(ascending=False).head(30)
+    top_dict[data.columns[c]] = list(zip(top.index, top.values))
+# Print the top 15 words said in each book
+for chapter, top_words in top_dict.items():
+    print(chapter)
+    print(', '.join([word for word, count in top_words[0:14]]))
+    print('---')
+
 # print(data.head())
-# print(data['Chapter3'][10:20])
+# print(data['Book3'][10:20])
 
 # change the value to black
 
